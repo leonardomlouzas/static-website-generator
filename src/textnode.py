@@ -13,7 +13,7 @@ class TextType(Enum):
 
 class TextNode:
     def __init__(self, text, text_type, url=None):
-        self.text = text
+        self.text = text.replace("\n", " ")
         self.text_type = text_type
         self.url = url
 
@@ -50,3 +50,13 @@ def text_node_to_html_node(text_node: TextNode):
 
         case _:
             raise ValueError("Invalid TextType")
+
+
+def leaf_node_to_html(leaf: LeafNode):
+    if leaf.tag is None:
+        return leaf.value
+
+    props = ""
+    if leaf.props:
+        props = " ".join([f'{key}="{value}"' for key, value in leaf.props.items()])
+    return f"<{leaf.tag}{props}>{leaf.value}</{leaf.tag}>"
